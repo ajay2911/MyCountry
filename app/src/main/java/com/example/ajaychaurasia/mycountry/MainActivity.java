@@ -2,6 +2,8 @@ package com.example.ajaychaurasia.mycountry;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -10,18 +12,26 @@ import com.example.ajaychaurasia.mycountry.pojo.JSONResponseData;
 import com.example.ajaychaurasia.mycountry.restinterface.DropboxAPI;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    String TAG = "MainActivity";
+    private String TAG = "MainActivity";
+
+    @BindView(R.id.recycler_list)
+    RecyclerView recyclerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        recyclerList.setLayoutManager(new LinearLayoutManager(this));
+
         fetchListData();
     }
 
