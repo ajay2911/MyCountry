@@ -8,7 +8,16 @@ package com.example.ajaychaurasia.mycountry.pojo;
 
 public class JSONResponseData {
     String title;
-    RowData rowData[];
+
+    public RowData[] getRows() {
+        return rows;
+    }
+
+    public void setRows(RowData[] rows) {
+        this.rows = rows;
+    }
+
+    RowData rows[];
 
     public String getTitle() {
         return title;
@@ -18,11 +27,4 @@ public class JSONResponseData {
         this.title = title;
     }
 
-    public RowData[] getRowData() {
-        return rowData;
-    }
-
-    public void setRowData(RowData[] rowData) {
-        this.rowData = rowData;
-    }
 }

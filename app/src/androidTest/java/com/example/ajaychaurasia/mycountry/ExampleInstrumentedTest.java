@@ -2,11 +2,18 @@ package com.example.ajaychaurasia.mycountry;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.*;
 
 /**
@@ -20,7 +27,15 @@ public class ExampleInstrumentedTest {
     public void useAppContext() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
-
         assertEquals("com.example.ajaychaurasia.mycountry", appContext.getPackageName());
+    }
+
+    @Rule
+    public ActivityTestRule<MainActivity> menuActivityTestRule =
+            new ActivityTestRule<>(MainActivity.class, true, true);
+
+    @Test
+    public void recyclerViewVisibilityTest(){
+        onView(withId(R.id.recycler_list)).check(matches(isDisplayed()));
     }
 }

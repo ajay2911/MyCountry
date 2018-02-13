@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ajaychaurasia.mycountry.adapter.ListDataAdapter;
 import com.example.ajaychaurasia.mycountry.pojo.JSONResponseData;
 import com.example.ajaychaurasia.mycountry.restinterface.DropboxAPI;
 
@@ -35,18 +38,23 @@ public class MainActivity extends AppCompatActivity {
         fetchListData();
     }
 
+    /*
+    * Method to trigger REST Api call and receive JSON Data
+    * Recieved data is passed to Adapter for UI rendering
+    * */
     private void fetchListData() {
-
-        Call<JSONResponseData> responseData = DropboxAPI.getService().getFactsData();
+        final Call<JSONResponseData> responseData = DropboxAPI.getService().getFactsData();
         responseData.enqueue(new Callback<JSONResponseData>() {
             @Override
             public void onResponse(Call<JSONResponseData> call, Response<JSONResponseData> response) {
                 JSONResponseData restResponse = response.body();
+                recyclerList.setAdapter(new ListDataAdapter(MainActivity.this,restResponse.getRows()));
                 Log.d(TAG+".fetchListData()","Response received with title as: "+restResponse.getTitle());
             }
 
             @Override
             public void onFailure(Call<JSONResponseData> call, Throwable t) {
+                recyclerList.setVisibility(View.GONE);
                 Log.d(TAG+".fetchListData()","Error occurred: "+t.getMessage());
             }
         });
