@@ -39,7 +39,9 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.ListDa
         holder.itemTitle.setText(singleRowData.getTitle());
         holder.description.setText(singleRowData.getDescription());
 
-        //This is Picasso Builder which renders images from URL and if it fails the error is displayed as logs
+        //  This is Picasso Builder which renders images from URL
+        //  The placeholder image is a replacement for the time image is being loaded
+        //  If the image couldn't be loaded the error image is displayed
         Picasso.with(context).setLoggingEnabled(true);
         Picasso.with(context)
                 .load(singleRowData.getImageHref())

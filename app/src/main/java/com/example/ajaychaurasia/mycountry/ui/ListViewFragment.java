@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.example.ajaychaurasia.mycountry.MainActivity;
 import com.example.ajaychaurasia.mycountry.R;
 import com.example.ajaychaurasia.mycountry.adapter.ListDataAdapter;
-import com.example.ajaychaurasia.mycountry.pojo.JSONResponseData;
+import com.example.ajaychaurasia.mycountry.pojo.RowData;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,13 +36,8 @@ public class ListViewFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        MainActivity mainActivity = (MainActivity) context;
-        try {
-            updateDataCallback = (UpdateData) mainActivity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(mainActivity.toString()
-                    + " must implement UpdateData");
-        }
+        //  The CallBack object is initiated with MainActivity instance
+        updateDataCallback = (MainActivity) context;
     }
 
     @Nullable
@@ -64,9 +59,12 @@ public class ListViewFragment extends Fragment {
         return view;
     }
 
-    public void updateViewWithResponse(JSONResponseData restResponse) {
-        if (null != restResponse.getRows()) {
-            recyclerList.setAdapter(new ListDataAdapter(getContext(), restResponse.getRows()));
+    /*
+    * When response is received this method updates UI with Row Data
+    * */
+    public void updateViewWithResponse(RowData[] rowDataArray) {
+        if (null != rowDataArray) {
+            recyclerList.setAdapter(new ListDataAdapter(getContext(), rowDataArray));
             recyclerList.setVisibility(View.VISIBLE);
             errorMessageText.setVisibility(View.GONE);
         } else {
@@ -77,12 +75,16 @@ public class ListViewFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(false);
     }
 
+    /*
+    * When REST Call results in error this method updates UI with error screen
+    * */
     public void updateViewWithError() {
         recyclerList.setVisibility(View.GONE);
         errorMessageText.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setRefreshing(false);
     }
 
+    // Interface to support UICallback and interaction
     public interface UpdateData {
         void updateListData();
     }

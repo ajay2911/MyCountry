@@ -9,7 +9,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.InvocationTargetException;
+
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -34,7 +37,12 @@ public class ExampleInstrumentedTest {
             new ActivityTestRule<>(MainActivity.class, true, true);
 
     @Test
-    public void recyclerViewVisibilityTest(){
-        onView(withId(R.id.recycler_list)).check(matches(isDisplayed()));
+    public void fragmentAttachToUiTest(){
+        onView(withId(R.id.list_view_frag)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void swipeGestureTest() throws InvocationTargetException, IllegalAccessException {
+        onView(withId(R.id.list_view_frag)).perform(swipeDown());
     }
 }

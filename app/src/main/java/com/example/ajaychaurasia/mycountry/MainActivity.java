@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements ListViewFragment.
 
     /*
     * Method to trigger REST Api call and receive JSON Data
-    * Received data is passed to Adapter for UI rendering
+    * Received data is passed to ListViewFragment for UI rendering
     * */
     private void fetchListData() {
         final Call<JSONResponseData> responseData = DropboxAPI.getService(MainActivity.this).getFactsData();
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements ListViewFragment.
                 if (null != restResponse.getTitle()) {
                     getSupportActionBar().setTitle(restResponse.getTitle());
                 }
-                listViewFragment.updateViewWithResponse(restResponse);
+                listViewFragment.updateViewWithResponse(restResponse.getRows());
             }
 
             @Override
