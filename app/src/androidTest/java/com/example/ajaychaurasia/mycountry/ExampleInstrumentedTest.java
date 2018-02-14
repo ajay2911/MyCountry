@@ -1,19 +1,13 @@
 package com.example.ajaychaurasia.mycountry;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.example.ajaychaurasia.mycountry.ui.ListViewFragment;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
@@ -46,7 +40,18 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
-    public void swipeGestureTest() throws InvocationTargetException, IllegalAccessException {
+    public void swipeGestureTest() {
         onView(withId(R.id.list_view_frag)).perform(swipeDown());
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.recycler_list)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void checkErrorScreen(){
+        onView(withId(R.id.error_message)).check(matches(isDisplayed()));
     }
 }
