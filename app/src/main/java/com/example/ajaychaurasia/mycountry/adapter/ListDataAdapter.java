@@ -1,7 +1,9 @@
 package com.example.ajaychaurasia.mycountry.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +42,19 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.ListDa
         RowData singleRowData = rowData[position];
         holder.itemTitle.setText(singleRowData.getTitle());
         holder.description.setText(singleRowData.getDescription());
-        Picasso.with(context).setLoggingEnabled(true);
-        Picasso.with(context)
+
+        //This is Picasso Builder which renders images from URL and if it fails the error is displayed as logs
+        Picasso.Builder builder = new Picasso.Builder(context);
+        builder.listener(new Picasso.Listener()
+        {
+            @Override
+            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception)
+            {
+                Log.d("ListDataAdapter.onBindViewHolder","Image loading failed as: "+exception.getMessage());
+            }
+        });
+        builder.build().setLoggingEnabled(true);
+        builder.build()
                 .load(singleRowData.getImageHref())
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_foreground)

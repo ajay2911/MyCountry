@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.swiperefresh)
     SwipeRefreshLayout swipeRefreshLayout;
 
+    @BindView(R.id.error_message)
+    TextView errorMessageText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        updateData();
+                        fetchListData();
                     }
                 }
         );
@@ -50,28 +53,28 @@ public class MainActivity extends AppCompatActivity {
         fetchListData();
     }
 
-    private void updateData(){
-        fetchListData();
-        swipeRefreshLayout.setRefreshing(false);
-    }
-
     /*
     * Method to trigger REST Api call and receive JSON Data
     * Recieved data is passed to Adapter for UI rendering
     * */
     private void fetchListData() {
-        final Call<JSONResponseData> responseData = DropboxAPI.getService().getFactsData();
+        final Call<JSONResponseData> responseData = DropboxAPI.getService(this).getFactsData();
         responseData.enqueue(new Callback<JSONResponseData>() {
             @Override
             public void onResponse(Call<JSONResponseData> call, Response<JSONResponseData> response) {
                 JSONResponseData restResponse = response.body();
                 recyclerList.setAdapter(new ListDataAdapter(MainActivity.this,restResponse.getRows()));
+                recyclerList.setVisibility(View.VISIBLE);
+                errorMessageText.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
                 Log.d(TAG+".fetchListData()","Response received with title as: "+restResponse.getTitle());
             }
 
             @Override
             public void onFailure(Call<JSONResponseData> call, Throwable t) {
                 recyclerList.setVisibility(View.GONE);
+                errorMessageText.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setRefreshing(false);
                 Log.d(TAG+".fetchListData()","Error occurred: "+t.getMessage());
             }
         });

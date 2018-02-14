@@ -1,5 +1,11 @@
 package com.example.ajaychaurasia.mycountry.restinterface;
 
+import android.app.Application;
+import android.content.Context;
+import android.content.res.Resources;
+
+import com.example.ajaychaurasia.mycountry.MainActivity;
+import com.example.ajaychaurasia.mycountry.R;
 import com.example.ajaychaurasia.mycountry.pojo.JSONResponseData;
 
 import retrofit2.Call;
@@ -14,15 +20,13 @@ import retrofit2.http.GET;
 
 public class DropboxAPI {
 
-    public static final String URL = "https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/555/";
-
     public static DataService dataService = null;
 
     //Creating static retrofit builder object
-    public static DataService getService(){
+    public static DataService getService(Context context){
         if(dataService==null){
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(URL)
+                    .baseUrl(context.getString(R.string.dropboxURL))
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             dataService = retrofit.create(DataService.class);
