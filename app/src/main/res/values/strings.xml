@@ -2,4 +2,5 @@
     <string name="app_name">My Country</string>
     <string name="dropboxURL">https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/555/</string>
     <string name="error_message">There was some error while getting the data.\nPlease check your internet.</string>
+    <string name="no_row_recieved">No data about the country was received</string>
 </resources>

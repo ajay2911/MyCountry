@@ -1,15 +1,13 @@
 package com.example.ajaychaurasia.mycountry;
 
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ajaychaurasia.mycountry.adapter.ListDataAdapter;
 import com.example.ajaychaurasia.mycountry.pojo.JSONResponseData;
@@ -23,7 +21,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String TAG = "MainActivity";
+    private final String TAG = "MainActivity";
 
     @BindView(R.id.recycler_list)
     RecyclerView recyclerList;
@@ -55,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     /*
     * Method to trigger REST Api call and receive JSON Data
-    * Recieved data is passed to Adapter for UI rendering
+    * Received data is passed to Adapter for UI rendering
     * */
     private void fetchListData() {
         final Call<JSONResponseData> responseData = DropboxAPI.getService(this).getFactsData();
@@ -63,9 +61,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponseData> call, Response<JSONResponseData> response) {
                 JSONResponseData restResponse = response.body();
-                recyclerList.setAdapter(new ListDataAdapter(MainActivity.this,restResponse.getRows()));
-                recyclerList.setVisibility(View.VISIBLE);
-                errorMessageText.setVisibility(View.GONE);
+                if(null!=restResponse.getRows()) {
+                    recyclerList.setAdapter(new ListDataAdapter(MainActivity.this, restResponse.getRows()));
+                    recyclerList.setVisibility(View.VISIBLE);
+                    errorMessageText.setVisibility(View.GONE);
+                } else {
+                    recyclerList.setVisibility(View.GONE);
+                    errorMessageText.setVisibility(View.VISIBLE);
+                    errorMessageText.setText(MainActivity.this.getResources().getString(R.string.no_row_recieved));
+                }
                 swipeRefreshLayout.setRefreshing(false);
                 Log.d(TAG+".fetchListData()","Response received with title as: "+restResponse.getTitle());
             }

@@ -7,13 +7,13 @@ package com.example.ajaychaurasia.mycountry.pojo;
  */
 
 public class JSONResponseData {
-    String title;
+    private String title;
 
     public RowData[] getRows() {
         return rows;
     }
 
-    RowData rows[];
+    private RowData rows[];
 
     public String getTitle() {
         return title;

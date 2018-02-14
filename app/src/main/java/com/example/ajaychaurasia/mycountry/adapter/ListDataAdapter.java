@@ -22,8 +22,8 @@ import com.squareup.picasso.Picasso;
 
 public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.ListDataViewHolder> {
 
-    private Context context;
-    private RowData rowData[];
+    private final Context context;
+    private final RowData rowData[];
 
     public ListDataAdapter(Context context, RowData[] rowData) {
         this.context = context;
@@ -71,8 +71,8 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.ListDa
     * */
     public class ListDataViewHolder extends RecyclerView.ViewHolder {
 
-        TextView itemTitle, description;
-        ImageView imageContainer;
+        final TextView itemTitle, description;
+        final ImageView imageContainer;
 
         public ListDataViewHolder(View itemView) {
             super(itemView);

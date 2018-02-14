@@ -1,10 +1,7 @@
 package com.example.ajaychaurasia.mycountry.restinterface;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.res.Resources;
 
-import com.example.ajaychaurasia.mycountry.MainActivity;
 import com.example.ajaychaurasia.mycountry.R;
 import com.example.ajaychaurasia.mycountry.pojo.JSONResponseData;
 
@@ -20,7 +17,7 @@ import retrofit2.http.GET;
 
 public class DropboxAPI {
 
-    public static DataService dataService = null;
+    private static DataService dataService = null;
 
     //Creating static retrofit builder object
     public static DataService getService(Context context){

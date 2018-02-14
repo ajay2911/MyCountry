@@ -7,8 +7,8 @@ package com.example.ajaychaurasia.mycountry.pojo;
  */
 
 public class RowData {
-    String title;
-    String description;
+    private String title;
+    private String description;
 
     public String getTitle() {
         return title;
@@ -22,5 +22,5 @@ public class RowData {
         return imageHref;
     }
 
-    String imageHref;
+    private String imageHref;
 }
