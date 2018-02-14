@@ -1,9 +1,7 @@
 package com.example.ajaychaurasia.mycountry.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +13,6 @@ import com.example.ajaychaurasia.mycountry.pojo.RowData;
 import com.squareup.picasso.Picasso;
 
 /**
- * Created by Ajay Chaurasia on 13-Feb-18.
- * <p>
  * Adapter to render data on RecyclerView
  */
 
@@ -44,20 +40,11 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.ListDa
         holder.description.setText(singleRowData.getDescription());
 
         //This is Picasso Builder which renders images from URL and if it fails the error is displayed as logs
-        Picasso.Builder builder = new Picasso.Builder(context);
-        builder.listener(new Picasso.Listener()
-        {
-            @Override
-            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception)
-            {
-                Log.d("ListDataAdapter.onBindViewHolder","Image loading failed as: "+exception.getMessage());
-            }
-        });
-        builder.build().setLoggingEnabled(true);
-        builder.build()
+        Picasso.with(context).setLoggingEnabled(true);
+        Picasso.with(context)
                 .load(singleRowData.getImageHref())
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_foreground)
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.error)
                 .into(holder.imageContainer);
     }
 
@@ -79,7 +66,6 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.ListDa
             itemTitle = itemView.findViewById(R.id.title);
             description = itemView.findViewById(R.id.description);
             imageContainer = itemView.findViewById(R.id.imageContainer);
-
         }
     }
 }

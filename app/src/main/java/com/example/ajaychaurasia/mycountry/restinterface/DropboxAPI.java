@@ -11,7 +11,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 
 /**
- * Created by Ajay Chaurasia on 13-Feb-18.
  * Used to create and send REST services
  */
 

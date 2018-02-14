@@ -1,8 +1,6 @@
 package com.example.ajaychaurasia.mycountry.pojo;
 
 /**
- * Created by Ajay Chaurasia on 13-Feb-18.
- * <p>
  * This holds each of the Row Data in the Response
  */
 

@@ -1,53 +1,36 @@
 package com.example.ajaychaurasia.mycountry;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
-import com.example.ajaychaurasia.mycountry.adapter.ListDataAdapter;
 import com.example.ajaychaurasia.mycountry.pojo.JSONResponseData;
 import com.example.ajaychaurasia.mycountry.restinterface.DropboxAPI;
+import com.example.ajaychaurasia.mycountry.ui.ListViewFragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
-
-    private final String TAG = "MainActivity";
-
-    @BindView(R.id.recycler_list)
-    RecyclerView recyclerList;
-
-    @BindView(R.id.swiperefresh)
-    SwipeRefreshLayout swipeRefreshLayout;
-
-    @BindView(R.id.error_message)
-    TextView errorMessageText;
+public class MainActivity extends AppCompatActivity implements ListViewFragment.UpdateData {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
-        recyclerList.setLayoutManager(new LinearLayoutManager(this));
-        swipeRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        fetchListData();
-                    }
-                }
-        );
+        //Adding the ListView Fragment to MainActivity
+        if (findViewById(R.id.fragment_container) != null) {
+            if (savedInstanceState != null) {
+                return;
+            }
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, new ListViewFragment(), "ListFragment")
+                    .commit();
+        }
+    }
 
+    @Override
+    public void updateListData() {
         fetchListData();
     }
 
@@ -56,30 +39,22 @@ public class MainActivity extends AppCompatActivity {
     * Received data is passed to Adapter for UI rendering
     * */
     private void fetchListData() {
-        final Call<JSONResponseData> responseData = DropboxAPI.getService(this).getFactsData();
+        final Call<JSONResponseData> responseData = DropboxAPI.getService(MainActivity.this).getFactsData();
+        final ListViewFragment listViewFragment = (ListViewFragment) getSupportFragmentManager().findFragmentByTag("ListFragment");
+
         responseData.enqueue(new Callback<JSONResponseData>() {
             @Override
             public void onResponse(Call<JSONResponseData> call, Response<JSONResponseData> response) {
                 JSONResponseData restResponse = response.body();
-                if(null!=restResponse.getRows()) {
-                    recyclerList.setAdapter(new ListDataAdapter(MainActivity.this, restResponse.getRows()));
-                    recyclerList.setVisibility(View.VISIBLE);
-                    errorMessageText.setVisibility(View.GONE);
-                } else {
-                    recyclerList.setVisibility(View.GONE);
-                    errorMessageText.setVisibility(View.VISIBLE);
-                    errorMessageText.setText(MainActivity.this.getResources().getString(R.string.no_row_recieved));
+                if (null != restResponse.getTitle()) {
+                    getSupportActionBar().setTitle(restResponse.getTitle());
                 }
-                swipeRefreshLayout.setRefreshing(false);
-                Log.d(TAG+".fetchListData()","Response received with title as: "+restResponse.getTitle());
+                listViewFragment.updateViewWithResponse(restResponse);
             }
 
             @Override
             public void onFailure(Call<JSONResponseData> call, Throwable t) {
-                recyclerList.setVisibility(View.GONE);
-                errorMessageText.setVisibility(View.VISIBLE);
-                swipeRefreshLayout.setRefreshing(false);
-                Log.d(TAG+".fetchListData()","Error occurred: "+t.getMessage());
+                listViewFragment.updateViewWithError();
             }
         });
     }
