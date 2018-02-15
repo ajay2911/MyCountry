@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.ajaychaurasia.mycountry.MainActivity;
 import com.example.ajaychaurasia.mycountry.R;
 import com.example.ajaychaurasia.mycountry.adapter.ListDataAdapter;
+import com.example.ajaychaurasia.mycountry.pojo.JSONResponseData;
 import com.example.ajaychaurasia.mycountry.pojo.RowData;
 
 import butterknife.BindView;
@@ -55,18 +56,24 @@ public class ListViewFragment extends Fragment {
                     }
                 }
         );
-        updateDataCallback.updateListData();
+        setRetainInstance(true);
+        if(jsonResponseData!=null){
+            updateViewWithResponse(jsonResponseData);
+        }
         return view;
     }
 
     /*
     * When response is received this method updates UI with Row Data
     * */
-    public void updateViewWithResponse(RowData[] rowDataArray) {
+    public void updateViewWithResponse(JSONResponseData jsonResponseData) {
+        updateDataCallback.updateTitle(jsonResponseData.getTitle());
+        RowData[] rowDataArray = jsonResponseData.getRows();
         if (null != rowDataArray) {
             recyclerList.setAdapter(new ListDataAdapter(getContext(), rowDataArray));
             recyclerList.setVisibility(View.VISIBLE);
             errorMessageText.setVisibility(View.GONE);
+            setJsonResponseData(jsonResponseData);
         } else {
             recyclerList.setVisibility(View.GONE);
             errorMessageText.setVisibility(View.VISIBLE);
@@ -84,8 +91,15 @@ public class ListViewFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(false);
     }
 
+    public void setJsonResponseData(JSONResponseData jsonResponseData) {
+        this.jsonResponseData = jsonResponseData;
+    }
+
+    private JSONResponseData jsonResponseData;
+
     // Interface to support UICallback and interaction
     public interface UpdateData {
         void updateListData();
+        void updateTitle(String title);
     }
 }
