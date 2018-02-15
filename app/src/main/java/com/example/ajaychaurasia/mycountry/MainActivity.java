@@ -1,3 +1,4 @@
+
 package com.example.ajaychaurasia.mycountry;
 
 import android.os.Bundle;
@@ -21,10 +22,12 @@ public class MainActivity extends AppCompatActivity implements ListViewFragment.
         setContentView(R.layout.activity_main);
 
         //Adding the ListView Fragment to MainActivity
+        //This loads data for the first time on activity creation
+        //On Orientation change, fragment's old instance is retained
         if (findViewById(R.id.fragment_container) != null) {
             listViewFragment = (ListViewFragment) getSupportFragmentManager().findFragmentByTag("ListFragment");
             if (listViewFragment == null) {
-                reinitiateFragment();
+                initiateFragment();
                 fetchListData();
             }
         }
@@ -42,7 +45,8 @@ public class MainActivity extends AppCompatActivity implements ListViewFragment.
         }
     }
 
-    private void reinitiateFragment() {
+    // This methods creates a new instance of ListViewFragment
+    private void initiateFragment() {
         listViewFragment = new ListViewFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, listViewFragment, "ListFragment")

@@ -56,7 +56,11 @@ public class ListViewFragment extends Fragment {
                     }
                 }
         );
+
+        //This saves Fragment instance while configuration change
         setRetainInstance(true);
+
+        //Reuse JSONResponseData if its already present before orientation config change
         if(jsonResponseData!=null){
             updateViewWithResponse(jsonResponseData);
         }
@@ -73,6 +77,7 @@ public class ListViewFragment extends Fragment {
             recyclerList.setAdapter(new ListDataAdapter(getContext(), rowDataArray));
             recyclerList.setVisibility(View.VISIBLE);
             errorMessageText.setVisibility(View.GONE);
+            //To save the JSONResponseData for reuse in Orientation change
             setJsonResponseData(jsonResponseData);
         } else {
             recyclerList.setVisibility(View.GONE);
