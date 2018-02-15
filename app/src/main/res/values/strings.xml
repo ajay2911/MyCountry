@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">My Country</string>
     <string name="dropboxURL">https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/555/</string>
-    <string name="error_message">Loading data...\nEither your connection is slow or broken.</string>
+    <string name="error_message">Loading data&#8230;\nEither your connection is slow or broken.</string>
     <string name="no_row_recieved">No data about the country was received</string>
+    <string name="image_description">Image container to load image from a URL</string>
 </resources>

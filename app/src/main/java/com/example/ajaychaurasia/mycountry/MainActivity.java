@@ -21,25 +21,30 @@ public class MainActivity extends AppCompatActivity implements ListViewFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Adding the ListView Fragment to MainActivity
-        //This loads data for the first time on activity creation
-        //On Orientation change, fragment's old instance is retained
+        /* Adding the ListView Fragment to MainActivity
+        * This also queries data for the first time on activity creation
+        * on Orientation change, fragment's old instance is reused */
         if (findViewById(R.id.fragment_container) != null) {
             listViewFragment = (ListViewFragment) getSupportFragmentManager().findFragmentByTag("ListFragment");
             if (listViewFragment == null) {
                 initiateFragment();
-                fetchListData();
+                queryListData();
             }
         }
     }
 
+    // Callback method which updates data on SwipeRefresh gesture
     @Override
-    public void updateListData() {
-        fetchListData();
+    public void updateCountryData() {
+        queryListData();
     }
 
+    /* Callback method to update ActionBar title
+    *  Arguments can be null or a string value
+    *  When Null string is passed, title set is app name
+    */
     @Override
-    public void updateTitle(String title) {
+    public void updateActionBarTitle(String title) {
         if (null != title) {
             getSupportActionBar().setTitle(title);
         } else {
@@ -47,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements ListViewFragment.
         }
     }
 
-    // This methods creates a new instance of ListViewFragment
+    // This methods creates a new instance of ListViewFragment and attaches it to MainActivity
     private void initiateFragment() {
         listViewFragment = new ListViewFragment();
         getSupportFragmentManager().beginTransaction()
@@ -59,18 +64,18 @@ public class MainActivity extends AppCompatActivity implements ListViewFragment.
     * Method to trigger REST Api call and receive JSON Data
     * Received data is passed to ListViewFragment for UI rendering
     * */
-    private void fetchListData() {
+    private void queryListData() {
         final Call<JSONResponseData> responseData = DropboxAPI.getService(MainActivity.this).getFactsData();
         responseData.enqueue(new Callback<JSONResponseData>() {
             @Override
             public void onResponse(Call<JSONResponseData> call, Response<JSONResponseData> response) {
                 JSONResponseData restResponse = response.body();
-                listViewFragment.updateViewWithResponse(restResponse);
+                listViewFragment.updateViewWithResponseData(restResponse);
             }
 
             @Override
             public void onFailure(Call<JSONResponseData> call, Throwable t) {
-                listViewFragment.updateViewWithError();
+                listViewFragment.updateViewWithErrorScreen();
             }
         });
     }

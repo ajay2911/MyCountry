@@ -52,7 +52,7 @@ public class ListViewFragment extends Fragment {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        updateDataCallback.updateListData();
+                        updateDataCallback.updateCountryData();
                     }
                 }
         );
@@ -60,20 +60,23 @@ public class ListViewFragment extends Fragment {
         //This saves Fragment instance while configuration change
         setRetainInstance(true);
 
-        //Reuse JSONResponseData if its already present before orientation config change
+        // Reuse JSONResponseData if its already present before orientation config change
+        // Else display Error Screen while the data is being loaded (when Fragment is created for first time)
         if(getJsonResponseData()!=null){
-            updateViewWithResponse(jsonResponseData);
+            updateViewWithResponseData(jsonResponseData);
         } else {
-            updateViewWithError();
+            updateViewWithErrorScreen();
         }
         return view;
     }
 
     /*
     * When response is received this method updates UI with Row Data
+    * When no rowData is present, error screen is displayed hiding the RecyclerView
+    * Also, JSONResponseData is saved to reuse while configuration change
     * */
-    public void updateViewWithResponse(JSONResponseData jsonResponseData) {
-        updateDataCallback.updateTitle(jsonResponseData.getTitle());
+    public void updateViewWithResponseData(JSONResponseData jsonResponseData) {
+        updateDataCallback.updateActionBarTitle(jsonResponseData.getTitle());
         RowData[] rowDataArray = jsonResponseData.getRows();
         if (null != rowDataArray) {
             recyclerList.setAdapter(new ListDataAdapter(getContext(), rowDataArray));
@@ -92,12 +95,12 @@ public class ListViewFragment extends Fragment {
     /*
     * When REST Call results in error this method updates UI with error screen
     * */
-    public void updateViewWithError() {
+    public void updateViewWithErrorScreen() {
         recyclerList.setVisibility(View.GONE);
         errorMessageText.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setRefreshing(false);
-        setJsonResponseData(null);
-        updateDataCallback.updateTitle(null);
+        setJsonResponseData(null); //Nullifying old data if any present
+        updateDataCallback.updateActionBarTitle(null);   //Resetting ActionBar title to app name
     }
 
     public void setJsonResponseData(JSONResponseData jsonResponseData) {
@@ -110,9 +113,9 @@ public class ListViewFragment extends Fragment {
 
     private JSONResponseData jsonResponseData;
 
-    // Interface to support UICallback and interaction
+    // Interface to support interaction with Activity
     public interface UpdateData {
-        void updateListData();
-        void updateTitle(String title);
+        void updateCountryData();
+        void updateActionBarTitle(String title);
     }
 }
