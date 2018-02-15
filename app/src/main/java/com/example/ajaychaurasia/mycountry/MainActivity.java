@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements ListViewFragment.
     public void updateTitle(String title) {
         if (null != title) {
             getSupportActionBar().setTitle(title);
+        } else {
+            getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         }
     }
 

@@ -61,8 +61,10 @@ public class ListViewFragment extends Fragment {
         setRetainInstance(true);
 
         //Reuse JSONResponseData if its already present before orientation config change
-        if(jsonResponseData!=null){
+        if(getJsonResponseData()!=null){
             updateViewWithResponse(jsonResponseData);
+        } else {
+            updateViewWithError();
         }
         return view;
     }
@@ -94,10 +96,16 @@ public class ListViewFragment extends Fragment {
         recyclerList.setVisibility(View.GONE);
         errorMessageText.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setRefreshing(false);
+        setJsonResponseData(null);
+        updateDataCallback.updateTitle(null);
     }
 
     public void setJsonResponseData(JSONResponseData jsonResponseData) {
         this.jsonResponseData = jsonResponseData;
+    }
+
+    public JSONResponseData getJsonResponseData() {
+        return jsonResponseData;
     }
 
     private JSONResponseData jsonResponseData;
