@@ -14,6 +14,7 @@ import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -34,14 +35,41 @@ public class ExampleInstrumentedTest {
     public ActivityTestRule<MainActivity> menuActivityTestRule =
             new ActivityTestRule<>(MainActivity.class, true, true);
 
+    // This tests the ListViewFragment was successfully attached to the UI
     @Test
     public void fragmentAttachToUiTest(){
         onView(withId(R.id.list_view_frag)).check(matches(isDisplayed()));
     }
 
+    // This tests the RecyclerView was successfully displayed on UI
+    @Test
+    public void visibilityOfRecyclerView(){
+        // Adding wait time for RecyclerView to render with UI
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.recycler_list)).check(matches(isDisplayed()));
+    }
+
+    // This is a hardcoded test for ActionBar title
+    @Test
+    public void testActionBar(){
+        // Adding wait time for API to come back with data
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withText("About Canada")).check(matches(isDisplayed()));
+    }
+
+    // This tests positive scenario of app received response and data was displayed in RecyclerView after a pull to refresh
     @Test
     public void swipeGestureTest() {
         onView(withId(R.id.list_view_frag)).perform(swipeDown());
+        // Adding wait time for API to come back with data
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
@@ -50,6 +78,20 @@ public class ExampleInstrumentedTest {
         onView(withId(R.id.recycler_list)).check(matches(isDisplayed()));
     }
 
+    // This tests behaviour of app when Pull refresh is done when not connected to internet
+    @Test
+    public void swipeGestureTestWhenNoInternet() {
+        onView(withId(R.id.list_view_frag)).perform(swipeDown());
+        // Adding sufficient wait time for Timeout to happen
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.error_message)).check(matches(isDisplayed()));
+    }
+
+    // This tests behaviour of app when not connected to internet
     @Test
     public void checkErrorScreen(){
         onView(withId(R.id.error_message)).check(matches(isDisplayed()));
