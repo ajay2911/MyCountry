@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements ListViewFragment.
         * This also queries data for the first time on activity creation
         * on Orientation change, fragment's old instance is reused */
         if (findViewById(R.id.fragment_container) != null) {
-            listViewFragment = (ListViewFragment) getSupportFragmentManager().findFragmentByTag("ListFragment");
+            listViewFragment = (ListViewFragment) getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.list_fragment_tag));
             if (listViewFragment == null) {
                 initiateFragment();
                 queryListData();
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements ListViewFragment.
     private void initiateFragment() {
         listViewFragment = new ListViewFragment();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, listViewFragment, "ListFragment")
+                .add(R.id.fragment_container, listViewFragment, getResources().getString(R.string.list_fragment_tag))
                 .commit();
     }
 
