@@ -34,6 +34,23 @@ public class ListViewFragment extends Fragment {
 
     private UpdateData updateDataCallback;
 
+    private ListDataAdapter listDataAdapter;
+
+    //Method to initiate ListDataAdapter only once
+    public ListDataAdapter getListDataAdapter() {
+        if (null == listDataAdapter) {
+            listDataAdapter = new ListDataAdapter(getContext(), getJsonResponseData().getRows());
+        }
+        return listDataAdapter;
+    }
+
+    //Method to set Adapter only once during Fragment creation
+    public void setAdapter(){
+        if(null==recyclerList.getAdapter()){
+            recyclerList.setAdapter(getListDataAdapter());
+        }
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -79,11 +96,12 @@ public class ListViewFragment extends Fragment {
         updateDataCallback.updateActionBarTitle(jsonResponseData.getTitle());
         RowData[] rowDataArray = jsonResponseData.getRows();
         if (null != rowDataArray) {
-            recyclerList.setAdapter(new ListDataAdapter(getContext(), rowDataArray));
-            recyclerList.setVisibility(View.VISIBLE);
-            errorMessageText.setVisibility(View.GONE);
             //To save the JSONResponseData for reuse in Orientation change
             setJsonResponseData(jsonResponseData);
+            setAdapter();
+            getListDataAdapter().notifyDataSetChanged();
+            recyclerList.setVisibility(View.VISIBLE);
+            errorMessageText.setVisibility(View.GONE);
         } else {
             recyclerList.setVisibility(View.GONE);
             errorMessageText.setVisibility(View.VISIBLE);
