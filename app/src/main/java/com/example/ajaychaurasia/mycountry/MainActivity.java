@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements ListViewFragment.
     }
 
     // This methods creates a new instance of ListViewFragment and attaches it to MainActivity
-    private void initiateFragment() {
+    public void initiateFragment() {
         listViewFragment = new ListViewFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, listViewFragment, getResources().getString(R.string.list_fragment_tag))

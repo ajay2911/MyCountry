@@ -35,14 +35,14 @@ public class InstrumentedTests {
 
     // This tests the ListViewFragment was successfully attached to the UI
     @Test
-    public void fragmentAttachToUiTest(){
+    public void fragmentLayoutVisibilityTest(){
         onView(withId(R.id.list_view_frag)).check(matches(isDisplayed()));
     }
 
     // This tests the RecyclerView was successfully displayed on UI
     @Test
     public void visibilityOfRecyclerView(){
-        // Adding wait time for RecyclerView to render with UI
+        // Adding wait time for RecyclerView to render on UI
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
