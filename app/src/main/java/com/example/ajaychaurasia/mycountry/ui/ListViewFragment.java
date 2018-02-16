@@ -37,15 +37,15 @@ public class ListViewFragment extends Fragment {
     private ListDataAdapter listDataAdapter;
 
     //Method to initiate ListDataAdapter only once
-    public ListDataAdapter getListDataAdapter() {
+    private ListDataAdapter getListDataAdapter() {
         if (null == listDataAdapter) {
             listDataAdapter = new ListDataAdapter(getContext(), getJsonResponseData().getRows());
         }
         return listDataAdapter;
     }
 
-    //Method to set Adapter only once during Fragment creation
-    public void setAdapter(){
+    //Method to set Adapter
+    private void setAdapter(){
         if(null==recyclerList.getAdapter()){
             recyclerList.setAdapter(getListDataAdapter());
         }
@@ -121,11 +121,11 @@ public class ListViewFragment extends Fragment {
         updateDataCallback.updateActionBarTitle(null);   //Resetting ActionBar title to app name
     }
 
-    public void setJsonResponseData(JSONResponseData jsonResponseData) {
+    private void setJsonResponseData(JSONResponseData jsonResponseData) {
         this.jsonResponseData = jsonResponseData;
     }
 
-    public JSONResponseData getJsonResponseData() {
+    private JSONResponseData getJsonResponseData() {
         return jsonResponseData;
     }
 
